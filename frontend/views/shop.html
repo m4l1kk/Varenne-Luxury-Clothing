@@ -1,0 +1,26 @@
+<!-- View: Shop / collection listing (#shop) -->
+<div class="view-header">
+  <p class="eyebrow">Autumn / Winter 2026</p>
+  <h1>The Collection</h1>
+</div>
+
+<div class="container">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="btn-group flex-wrap" id="shopFilters" role="group" aria-label="Filter by category">
+      <button type="button" class="btn btn-outline-dark btn-sm active" data-category="All">All</button>
+      <button type="button" class="btn btn-outline-dark btn-sm" data-category="Women">Women</button>
+      <button type="button" class="btn btn-outline-dark btn-sm" data-category="Men">Men</button>
+      <button type="button" class="btn btn-outline-dark btn-sm" data-category="Accessories">Accessories</button>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <span class="small text-muted" id="shopCount"></span>
+      <select id="shopSort" class="form-select form-select-sm w-auto" aria-label="Sort products">
+        <option value="Newest">Newest</option>
+        <option value="Price: low to high">Price: low to high</option>
+        <option value="Price: high to low">Price: high to low</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row g-4" id="shopGrid"></div>
+</div>

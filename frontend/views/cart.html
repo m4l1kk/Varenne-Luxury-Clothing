@@ -1,0 +1,42 @@
+<!-- View: Shopping bag + checkout (#cart) -->
+<div class="view-header">
+  <p class="eyebrow">Your selection</p>
+  <h1>Shopping bag</h1>
+</div>
+
+<div class="container">
+  <div class="row g-5">
+    <div class="col-lg-7">
+      <div id="cartItems"></div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card card-body p-4 mb-4">
+        <h4 class="mb-3">Order summary</h4>
+        <div class="d-flex justify-content-between small mb-2"><span>Subtotal</span><span id="cartSubtotal"></span></div>
+        <div class="d-flex justify-content-between small mb-3"><span>Shipping</span><span id="cartShipping"></span></div>
+        <div class="d-flex justify-content-between border-top pt-3 fs-5"><span>Total</span><span id="cartTotal"></span></div>
+      </div>
+
+      <form class="card card-body p-4" novalidate data-success="Order placed (demo). Real checkout comes with the backend.">
+        <h4 class="mb-3">Checkout</h4>
+        <div class="row g-3">
+          <div class="col-sm-6"><label class="form-label" for="coFirst">First name</label><input id="coFirst" class="form-control" required></div>
+          <div class="col-sm-6"><label class="form-label" for="coLast">Last name</label><input id="coLast" class="form-control" required></div>
+          <div class="col-12"><label class="form-label" for="coAddress">Address</label><input id="coAddress" class="form-control" required></div>
+          <div class="col-sm-6"><label class="form-label" for="coCity">City</label><input id="coCity" class="form-control" required></div>
+          <div class="col-sm-6"><label class="form-label" for="coZip">Postal code</label><input id="coZip" class="form-control" required></div>
+          <div class="col-12">
+            <label class="form-label" for="coPay">Payment method</label>
+            <select id="coPay" class="form-select" required>
+              <option value="">Choose…</option>
+              <option>Card on delivery</option>
+              <option>Bank transfer</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-dark w-100 mt-4">Place order</button>
+      </form>
+    </div>
+  </div>
+</div>

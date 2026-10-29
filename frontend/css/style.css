@@ -1,0 +1,117 @@
+/* =========================================================
+   Varenne theme: black, ivory and gold on Bootstrap 5
+   ========================================================= */
+:root {
+  --mn-black: #0e0e0e;
+  --mn-charcoal: #1c1c1c;
+  --mn-ivory: #f7f3ec;
+  --mn-sand: #ebe4d8;
+  --mn-gold: #b8955a;
+  --mn-gold-dark: #9a7a44;
+  --mn-muted: #6f6a62;
+  --mn-serif: "Cormorant Garamond", Georgia, serif;
+  --mn-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --bs-body-font-family: var(--mn-sans);
+  --bs-body-bg: var(--mn-ivory);
+  --bs-body-color: var(--mn-black);
+  --bs-link-color: var(--mn-black);
+  --bs-link-hover-color: var(--mn-gold-dark);
+  --bs-border-color: #ddd5c7;
+}
+
+body { background: var(--mn-ivory); color: var(--mn-black); font-weight: 400; }
+a { color: var(--mn-black); text-underline-offset: 3px; }
+a:hover { color: var(--mn-gold-dark); }
+
+h1, h2, h3, h4, .display-serif { font-family: var(--mn-serif); font-weight: 500; letter-spacing: .01em; }
+.eyebrow { text-transform: uppercase; letter-spacing: .25em; font-size: .72rem; color: var(--mn-gold-dark); font-weight: 500; }
+.text-muted-light { color: #9c968c !important; }
+.text-gold { color: var(--mn-gold) !important; }
+
+/* ---------- Brand / navbar ---------- */
+.announce { background: var(--mn-black); color: var(--mn-sand); letter-spacing: .05em; }
+.brand { font-family: var(--mn-serif); font-size: 1.6rem; letter-spacing: .3em; color: var(--mn-black); text-decoration: none; }
+.brand span { color: var(--mn-gold); }
+@media (max-width: 575.98px) { .mn-navbar .brand { font-size: 1.2rem; letter-spacing: .18em; } }
+.mn-navbar { background: rgba(247, 243, 236, .96); backdrop-filter: blur(6px); border-bottom: 1px solid var(--bs-border-color); }
+.mn-navbar .nav-link { text-transform: uppercase; letter-spacing: .15em; font-size: .78rem; color: var(--mn-black); padding: .9rem 1rem !important; }
+.mn-navbar .nav-link:hover, .mn-navbar .nav-link.active { color: var(--mn-gold-dark); }
+.mn-navbar .nav-icons .nav-link { font-size: 1.15rem; letter-spacing: 0; }
+.navbar-toggler { border: 0; box-shadow: none !important; }
+.cart-badge { position: absolute; top: .45rem; right: .25rem; min-width: 1.1rem; height: 1.1rem; border-radius: 1rem; background: var(--mn-gold); color: #fff; font-size: .65rem; display: grid; place-items: center; }
+@media (max-width: 991.98px) { .cart-badge { position: static; display: inline-grid; margin-left: .5rem; } }
+
+/* ---------- SPA views ---------- */
+#app { min-height: 70vh; }
+.spa-view { animation: fadeIn .35s ease; }
+.spa-view[hidden] { display: none !important; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.loader { min-height: 60vh; display: grid; place-items: center; color: var(--mn-gold); }
+.view-header { padding: 3.5rem 0 2rem; text-align: center; border-bottom: 1px solid var(--bs-border-color); margin-bottom: 2.5rem; }
+
+/* ---------- Buttons / forms ---------- */
+.btn { border-radius: 0; text-transform: uppercase; letter-spacing: .15em; font-size: .78rem; padding: .8rem 1.6rem; }
+.btn-sm { padding: .45rem .9rem; font-size: .7rem; }
+.btn-dark { --bs-btn-bg: var(--mn-black); --bs-btn-border-color: var(--mn-black); --bs-btn-hover-bg: var(--mn-charcoal); }
+.btn-gold { background: var(--mn-gold); border-color: var(--mn-gold); color: #fff; }
+.btn-gold:hover { background: var(--mn-gold-dark); border-color: var(--mn-gold-dark); color: #fff; }
+.btn-outline-dark { --bs-btn-hover-bg: var(--mn-black); }
+.form-control, .form-select { border-radius: 0; border-color: #cfc6b6; background-color: #fffdf9; padding: .7rem .9rem; }
+.form-control:focus, .form-select:focus { border-color: var(--mn-gold); box-shadow: 0 0 0 .2rem rgba(184, 149, 90, .2); }
+.form-label { text-transform: uppercase; letter-spacing: .12em; font-size: .7rem; color: var(--mn-muted); }
+.card { border-radius: 0; border-color: var(--bs-border-color); background: #fffdf9; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; min-height: 78vh; display: flex; align-items: center; color: var(--mn-ivory);
+  background: radial-gradient(ellipse at 70% 30%, #3a3127 0%, #151310 55%, #0b0b0b 100%); overflow: hidden; }
+.hero::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0 1px, transparent 1px 120px); }
+.hero h1 { font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.05; }
+.hero .eyebrow { color: var(--mn-gold); }
+.hero > .container { position: relative; z-index: 1; }
+
+/* ---------- Product imagery (placeholder tiles until real photos exist) ---------- */
+.product-img { position: relative; aspect-ratio: 3 / 4; display: grid; place-items: center; overflow: hidden;
+  background: linear-gradient(160deg, var(--tone-a, #2a2622), var(--tone-b, #0f0e0d)); color: rgba(255,255,255,.85); }
+.product-img i { font-size: 3.2rem; opacity: .55; transition: transform .5s ease; }
+.product-card:hover .product-img i { transform: scale(1.12); }
+.product-img .tag { position: absolute; top: .8rem; left: .8rem; background: var(--mn-ivory); color: var(--mn-black);
+  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; padding: .3rem .6rem; }
+.product-card { text-decoration: none; color: inherit; display: block; }
+.product-card .name { font-family: var(--mn-serif); font-size: 1.25rem; margin: .8rem 0 .1rem; }
+.product-card .price { color: var(--mn-muted); font-size: .9rem; }
+.category-tile { aspect-ratio: 4 / 5; }
+.category-tile .label { position: absolute; bottom: 1.2rem; left: 1.2rem; font-family: var(--mn-serif); font-size: 1.8rem; color: #fff; }
+
+/* ---------- Product detail ---------- */
+.size-option input { display: none; }
+.size-option label { border: 1px solid #cfc6b6; min-width: 3rem; padding: .5rem .8rem; text-align: center; cursor: pointer; font-size: .8rem; }
+.size-option input:checked + label { background: var(--mn-black); color: #fff; border-color: var(--mn-black); }
+.swatch { width: 1.6rem; height: 1.6rem; border-radius: 50%; border: 2px solid #fff; outline: 1px solid #cfc6b6; display: inline-block; }
+
+/* External API placeholder: clearly marked for Milestone 3+ */
+.api-slot { border: 1px dashed var(--mn-gold); background: rgba(184, 149, 90, .06); padding: 1rem 1.2rem; }
+.api-slot .api-label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--mn-gold-dark); }
+
+/* ---------- Dashboard ---------- */
+.stat-card .value { font-family: var(--mn-serif); font-size: 2rem; }
+.dash-nav .nav-link { color: var(--mn-black); border-radius: 0; text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; }
+.dash-nav .nav-link.active { background: var(--mn-black); color: #fff; }
+.table { --bs-table-bg: transparent; }
+.table thead th { text-transform: uppercase; letter-spacing: .12em; font-size: .68rem; color: var(--mn-muted); font-weight: 500; }
+.badge-status { font-weight: 500; letter-spacing: .06em; border-radius: 0; }
+
+/* ---------- Auth ---------- */
+.auth-wrap { max-width: 440px; margin: 0 auto; }
+.divider { display: flex; align-items: center; gap: 1rem; color: var(--mn-muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .15em; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--bs-border-color); }
+
+/* ---------- Footer ---------- */
+.mn-footer { background: var(--mn-black); color: var(--mn-sand); margin-top: 5rem; }
+.mn-footer .brand { color: var(--mn-ivory); }
+.mn-footer h6 { text-transform: uppercase; letter-spacing: .2em; font-size: .72rem; color: var(--mn-gold); margin-bottom: 1rem; }
+.mn-footer a { color: var(--mn-sand); text-decoration: none; line-height: 2; }
+.mn-footer a:hover { color: var(--mn-gold); }
+.mn-footer hr { border-color: #333; }
+.toast { background: var(--mn-black); color: var(--mn-ivory); border-radius: 0; }
+.toast .btn-close { filter: invert(1); }

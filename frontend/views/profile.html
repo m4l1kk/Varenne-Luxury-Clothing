@@ -1,0 +1,80 @@
+<!-- View: Customer profile (#profile) -->
+<div class="view-header">
+  <p class="eyebrow">My account</p>
+  <h1>Welcome, Amina</h1>
+</div>
+
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">
+      <div class="nav flex-column nav-pills dash-nav" role="tablist">
+        <button class="nav-link text-start active" data-bs-toggle="pill" data-bs-target="#pf-details" type="button" role="tab">Personal details</button>
+        <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#pf-orders" type="button" role="tab">Order history</button>
+        <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#pf-addresses" type="button" role="tab">Addresses</button>
+        <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#pf-wishlist" type="button" role="tab">Wishlist</button>
+        <a class="nav-link" href="#login">Sign out</a>
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="pf-details" role="tabpanel">
+          <form class="card card-body p-4" novalidate data-success="Details saved (demo).">
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label" for="pfFirst">First name</label><input id="pfFirst" class="form-control" value="Amina" required></div>
+              <div class="col-md-6"><label class="form-label" for="pfLast">Last name</label><input id="pfLast" class="form-control" value="Hodžić" required></div>
+              <div class="col-md-6"><label class="form-label" for="pfEmail">Email</label><input type="email" id="pfEmail" class="form-control" value="amina@example.com" required></div>
+              <div class="col-md-6"><label class="form-label" for="pfPhone">Phone</label><input id="pfPhone" class="form-control" value="+387 61 000 000"></div>
+            </div>
+            <button class="btn btn-dark mt-4 align-self-start">Save changes</button>
+          </form>
+        </div>
+
+        <div class="tab-pane fade" id="pf-orders" role="tabpanel">
+          <div class="table-responsive card card-body p-0">
+            <table class="table align-middle mb-0">
+              <thead><tr><th class="ps-4">Order</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="ps-4">MN-10482</td><td>2026-10-12</td><td>2</td><td>€3,740</td><td><span class="badge badge-status text-bg-dark">Shipped</span></td></tr>
+                <tr><td class="ps-4">MN-10311</td><td>2026-08-03</td><td>1</td><td>€1,290</td><td><span class="badge badge-status text-bg-success">Delivered</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="pf-addresses" role="tabpanel">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card card-body p-4 h-100">
+                <span class="eyebrow mb-2">Default shipping</span>
+                <p class="mb-0">Amina Hodžić<br>Ferhadija 12<br>71000 Sarajevo<br>Bosnia and Herzegovina</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <button class="card card-body p-4 h-100 w-100 align-items-center justify-content-center text-muted js-demo-action">
+                <i class="bi bi-plus-lg fs-3"></i>Add address
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="pf-wishlist" role="tabpanel">
+          <div class="row g-4">
+            <div class="col-6 col-md-4">
+              <a class="product-card" href="#product/1">
+                <div class="product-img" style="--tone-a:#8a7660;--tone-b:#2b241d"><i class="bi bi-person-standing-dress"></i></div>
+                <div class="name">Cashmere Wrap Coat</div><div class="price">€2,450</div>
+              </a>
+            </div>
+            <div class="col-6 col-md-4">
+              <a class="product-card" href="#product/5">
+                <div class="product-img" style="--tone-a:#7a5636;--tone-b:#22160d"><i class="bi bi-handbag"></i></div>
+                <div class="name">Calfskin Tote</div><div class="price">€1,850</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

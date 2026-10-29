@@ -1,0 +1,45 @@
+<!-- View: Register (#register) -->
+<div class="container py-5">
+  <div class="auth-wrap py-4">
+    <div class="text-center mb-4">
+      <p class="eyebrow">Join the Maison</p>
+      <h1>Create an account</h1>
+    </div>
+
+    <form class="card card-body p-4" novalidate data-success="Account created (demo). Registration is saved once the backend exists.">
+      <div class="row g-3">
+        <div class="col-sm-6">
+          <label class="form-label" for="regFirst">First name</label>
+          <input id="regFirst" class="form-control" required>
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label" for="regLast">Last name</label>
+          <input id="regLast" class="form-control" required>
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="regEmail">Email</label>
+          <input type="email" id="regEmail" class="form-control" required>
+          <div class="invalid-feedback">Please enter a valid email.</div>
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="regPassword">Password</label>
+          <input type="password" id="regPassword" class="form-control" minlength="8" required>
+          <div class="form-text">At least 8 characters.</div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="regNews">
+            <label class="form-check-label small" for="regNews">Send me news about collections and private events</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="regTerms" required>
+            <label class="form-check-label small" for="regTerms">I accept the terms and privacy policy</label>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-dark w-100 mt-4">Create account</button>
+    </form>
+
+    <p class="text-center small mt-4">Already have an account? <a href="#login">Sign in</a></p>
+  </div>
+</div>
