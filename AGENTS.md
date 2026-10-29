@@ -10,7 +10,8 @@ Customers browse products, manage a bag and place orders; admins manage products
 
 - `frontend/`: static single-page application (HTML, Bootstrap 5.3, vanilla JS). No framework, no build step.
 - `backend/`: PHP REST API (from Milestone 2) in layers: `routes/` → `services/` → `dao/`, plus `middleware/` and `config/`.
-- `docs/`: `ERD.md` (database plan) and `AI_LOG.md` (log of AI usage, required by the course).
+- `backend/database/varenne.sql`: the MySQL schema and sample data (Milestone 2).
+- `docs/`: `ERD.md` (database design and keys) and `AI_LOG.md` (log of AI usage, required by the course).
 
 ## Frontend rules
 
@@ -39,6 +40,22 @@ Customers browse products, manage a bag and place orders; admins manage products
    Never print, log or commit real credentials.
 5. Passwords are stored with `password_hash()`; never store or return plain text passwords.
 
+### Database and DAO rules (Milestone 2)
+
+6. `backend/database/varenne.sql` is the single source of the schema. A schema change goes into that file,
+   `docs/ERD.md` and the DAO's column list in the same commit. Keep sample data consistent (order totals
+   equal the sum of their `order_items`).
+7. Every DAO extends `BaseDao` and calls `parent::__construct('<table>', [<writable columns>])`. Do not
+   list `id` or `created_at` as writable. Do not copy the CRUD methods into a child DAO; only add
+   entity-specific queries.
+8. SQL values are always bound with named placeholders (`:email`). Never put a variable into the SQL text,
+   except column/table names that come from the DAO's own fixed list. A named placeholder may be used only once
+   per statement (emulated prepares are off).
+9. Get the connection only through `Database::connect()`; never create another `new PDO(...)`.
+10. `UserDao` must never return `password_hash`, except from `getByEmail()` (needed for login).
+11. DAOs do not validate input or decide permissions. That belongs to services (Milestone 3).
+12. After changing a DAO, run `php backend/tests/dao_test.php` and add a check for any new method.
+
 ## General rules
 
 - Keep changes small and focused; do not reformat files you were not asked to touch.
@@ -62,4 +79,6 @@ Customers browse products, manage a bag and place orders; admins manage products
 - Frontend: start Apache (XAMPP), open `http://localhost/MalikIslamovic/Foundations-of-Frontend/frontend/`,
   click through every navbar link, check the browser console has no errors, and check the Network tab shows
   each `views/*.html` requested only once.
-- Backend: call the endpoint with Postman or `curl` and check the response and status code.
+- Database: re-import `backend/database/varenne.sql` in phpMyAdmin; it must run without errors.
+- DAO layer: `php backend/tests/dao_test.php` must end with `0 failed`.
+- Backend endpoints (Milestone 3+): call the endpoint with Postman or `curl` and check the response and status code.

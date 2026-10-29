@@ -78,3 +78,52 @@ New entries are added with the `update-ai-log` skill (`.github/skills/update-ai-
   when checking the page in the browser.
 - **Correct?** No. Fixed with explicit `a { color: var(--mn-black) }` and `a:hover` rules in `css/style.css`.
 - **What I learned:** Always look at the result in the browser; the AI's explanation of a CSS change is not proof that it works.
+
+## Milestone 2
+
+### Tools Used
+
+- **Claude (Claude Code agent):** Assisted with parts of the database schema, DAO implementation, test script, and documentation.
+- I reviewed the generated suggestions, tested the SQL in phpMyAdmin, and ran the DAO test script before committing.
+
+### 2026-10-27: Database Schema and DAO Layer
+
+- **Tool / Mode:** Claude (Claude Code agent)
+- **Task:** Assist with implementing the MySQL database based on `docs/ERD.md`, including sample data and the DAO layer with CRUD operations.
+- **Prompt:** "Review docs/ERD.md and help implement the database schema and DAO layer with prepared statements, sample data, and CRUD tests. Follow AGENTS.md and the existing project structure."
+- **Result:**
+  - Assisted with `backend/database/varenne.sql`, including the 10 tables, relationships, constraints, and sample data matching `frontend/js/data.js`.
+  - Provided suggestions for `Database.php`, `BaseDao.php`, and the 10 entity-specific DAO classes.
+  - Helped structure `backend/tests/dao_test.php` to test CRUD operations inside a transaction that is rolled back.
+- **Correct?** Partly. The basic CRUD tests passed, but two issues were discovered during additional testing.
+- **What I Learned:** Basic tests are not enough to confirm that database operations work correctly with unusual inputs.
+
+
+### 2026-10-29: AI was wrong: `false` could not be saved to a TINYINT column
+- **Tool / mode:** Claude agent
+- **Task:** `BaseDao::add()` / `update()` passing the data array to `$stmt->execute($data)`.
+- **Result:** `ProductDao->update(1, ['is_active' => false])` threw
+  `PDOException: 1366 Incorrect integer value: '' for column products.is_active`. `execute()` sends every value as a
+  string, PHP turns `false` into an empty string, and MySQL in strict mode refuses `''` for a number column.
+  `true` worked (it becomes `'1'`), so the normal test did not catch it.
+- **How it was noticed:** An extra check that hid a product with `is_active => false`.
+- **Correct?** No. Fixed in `BaseDao::onlyAllowedColumns()`: booleans are converted to `1` / `0` before
+  `execute()`. A check "PHP booleans are saved as 1 / 0" was added to `dao_test.php`.
+- **What I learned:** PDO does not know column types when values go through `execute()`; it is worth checking `false`, `0` and empty values.
+
+### 2026-10-29: AI was wrong: a negative quantity increased the stock
+- **Tool / mode:** Claude agent
+- **Task:** `ProductVariantDao::decreaseStock($id, $quantity)` for checkout.
+- **Result:** The query `UPDATE product_variants SET stock = stock - :quantity WHERE id = :id AND stock >= :min_stock`
+  correctly refused to sell more than is in stock, but `decreaseStock(1, -5)` returned `true` and raised the stock
+  from 4 to 9, because `stock - (-5)` is an addition and `stock >= -5` is always true.
+- **How it was noticed:** Reviewing the method and trying a negative number inside a rolled-back transaction.
+- **Correct?** No. Fixed by returning `false` when `$quantity <= 0`, and two checks were added to the test
+  (negative quantity is refused, a normal quantity lowers the stock). Quantity validation will also go into the
+  service in Milestone 3.
+- **What I learned:** The DAO should not trust its arguments when a wrong value silently corrupts data.
+
+### AGENTS.md changes in this milestone
+- Added "Database and DAO rules": `varenne.sql` is the source of the schema, every DAO extends `BaseDao` with a
+  list of writable columns, only named placeholders, one `Database::connect()`, never return `password_hash`,
+  and run `dao_test.php` after every DAO change.

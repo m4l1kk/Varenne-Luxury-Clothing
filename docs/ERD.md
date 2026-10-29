@@ -1,6 +1,8 @@
-# Draft ERD: Varenne
+# ERD: Varenne
 
-Draft database plan for Milestone 1. GitHub renders the Mermaid diagram below automatically.
+Database design for Varenne. It was drafted in Milestone 1 and built in Milestone 2 as
+[`backend/database/varenne.sql`](../backend/database/varenne.sql) (schema plus sample data).
+GitHub renders the Mermaid diagram below automatically.
 It can also be pasted into https://mermaid.live to export a PNG for submission.
 
 ```mermaid
@@ -114,6 +116,27 @@ erDiagram
 | `orders` | A placed order with status and total | `#profile` (Order history), `#dashboard` |
 | `order_items` | Lines of an order; `unit_price` is copied so later price changes don't alter old orders | `#dashboard` |
 | `reviews` | Ratings and comments on products | `#product` (Client reviews) |
+
+## Keys and constraints (Milestone 2)
+
+Every table has an `id INT UNSIGNED AUTO_INCREMENT` primary key. Foreign keys and what happens when the parent row is deleted:
+
+| Foreign key | References | On delete | Why |
+|---|---|---|---|
+| `addresses.user_id` | `users.id` | CASCADE | Addresses belong to the user |
+| `products.category_id` | `categories.id` | RESTRICT | A category with products cannot be deleted |
+| `product_variants.product_id` | `products.id` | CASCADE | Sizes/colours belong to the product |
+| `cart_items.user_id`, `cart_items.variant_id` | `users.id`, `product_variants.id` | CASCADE | The bag is temporary |
+| `wishlist_items.user_id`, `wishlist_items.product_id` | `users.id`, `products.id` | CASCADE | Saved pieces are temporary |
+| `orders.user_id` | `users.id` | RESTRICT | Order history must not disappear |
+| `orders.address_id` | `addresses.id` | SET NULL | Deleting an address keeps the order |
+| `order_items.order_id` | `orders.id` | CASCADE | Lines belong to the order |
+| `order_items.variant_id` | `product_variants.id` | RESTRICT | A sold variant cannot be deleted |
+| `reviews.user_id`, `reviews.product_id` | `users.id`, `products.id` | CASCADE | Reviews belong to both |
+
+Unique keys: `users.email`, `categories.name`, `categories.slug`, `product_variants.sku`,
+`cart_items (user_id, variant_id)`, `wishlist_items (user_id, product_id)`, `reviews (user_id, product_id)`.
+`reviews.rating` has a `CHECK (rating BETWEEN 1 AND 5)`.
 
 ## Notes
 
