@@ -1,0 +1,25 @@
+# Secrets / local configuration
+backend/config/config.php
+.env
+.env.*
+!.env.example
+
+# Logs (the folder stays, its contents do not)
+backend/logs/*
+!backend/logs/.gitkeep
+*.log
+
+# Dependencies / vendor folders
+vendor/
+backend/vendor/
+node_modules/
+
+# Downloaded template kept only as a local reference
+_template-reference/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
