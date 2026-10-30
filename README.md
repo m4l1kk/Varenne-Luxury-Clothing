@@ -4,14 +4,14 @@ Web Programming course project. Varenne is an online boutique for a luxury cloth
 customers browse the collection, view products, manage a shopping bag, check out and track orders;
 admins manage products, categories and orders from a dashboard.
 
-> **Status:** Milestone 1 (initial setup, static frontend, database planning). Draft README.
+> **Status:** Milestone 2 (MySQL database and DAO layer). The frontend still uses mock data until Milestone 4.
 
 ## Tech stack
 
 | Layer | Technology |
 |---|---|
 | Frontend | HTML5, CSS3, Bootstrap 5.3, Bootstrap Icons, vanilla JavaScript (hash-routed SPA) |
-| Backend (from Milestone 2) | PHP (REST API: routes → services → DAO), MySQL |
+| Backend | PHP 8, PDO, MySQL/MariaDB. DAO layer done in Milestone 2; FlightPHP routes and services in Milestone 3 |
 | External API (planned) | Currency conversion via a public exchange-rate API (Frankfurter) |
 | Local server | XAMPP (Apache + MySQL) |
 
@@ -27,12 +27,15 @@ Foundations-of-Frontend/
 │   ├── views/              # One HTML template per view (home, shop, product, cart, ...)
 │   └── assets/img/         # Static assets
 ├── backend/
-│   ├── routes/  services/  dao/  middleware/
+│   ├── dao/                # Database.php, BaseDao.php and one DAO per table
+│   ├── database/           # varenne.sql (schema + sample data)
+│   ├── tests/              # dao_test.php (CRUD check for every DAO)
+│   ├── routes/  services/  middleware/
 │   ├── config/             # config.example.php committed, config.php ignored
 │   ├── logs/               # ignored by Git
 │   └── index.php
 ├── docs/
-│   ├── ERD.md              # Draft entity-relationship diagram
+│   ├── ERD.md              # Entity-relationship diagram and keys
 │   └── AI_LOG.md           # AI assistant usage log
 ├── .github/
 │   ├── agents/             # Frontend, Backend and Reviewer agents
@@ -72,19 +75,38 @@ page is where converted prices will appear once the backend calls the exchange-r
 The views are loaded with `fetch()`, so the site must be opened through a web server, not by
 double-clicking `index.html` (`file://` blocks the requests).
 
-Backend config (from Milestone 2): copy `backend/config/config.example.php` to `backend/config/config.php`
-and fill in database credentials.
+### Database and backend
+
+1. Start MySQL in XAMPP and import `backend/database/varenne.sql` in phpMyAdmin (Import tab).
+   This creates the `varenne` database with sample data.
+2. Copy `backend/config/config.example.php` to `backend/config/config.php` and fill in your database
+   user and password. `config.php` is git-ignored.
+3. Check the DAO layer: `php backend/tests/dao_test.php` should print `0 failed`.
+
+## Test accounts
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@varenne.com` | `Admin123!` |
+| Customer | `amina@example.com` | `Customer123!` |
+
+The other sample customers (`luca@`, `sara@`, `emir@example.com`) use the same customer password.
+Login itself is added in Milestone 4.
 
 ## Database
 
-See the draft ERD in [docs/ERD.md](docs/ERD.md): 10 entities (users, addresses, categories, products,
-product_variants, cart_items, wishlist_items, orders, order_items, reviews).
+10 entities: users, addresses, categories, products, product_variants, cart_items, wishlist_items,
+orders, order_items, reviews. The diagram, foreign keys and delete rules are in [docs/ERD.md](docs/ERD.md);
+the SQL is in [backend/database/varenne.sql](backend/database/varenne.sql). The DAO classes are described in
+[backend/README.md](backend/README.md).
 
 ## Milestones
 
 - [x] **M1:** Project structure, static SPA, draft ERD, README, AI setup
-- [ ] **M2:** Database + backend CRUD (routes, services, DAO)
-- [ ] **M3+:** Connect frontend to backend, authentication, external API
+- [x] **M2:** MySQL database with sample data, DAO layer with a base DAO and CRUD for all 10 entities
+- [ ] **M3:** Services, FlightPHP routes, OpenAPI/Swagger, external API (Frankfurter)
+- [ ] **M4:** JWT authentication, roles, middleware, logging, connected frontend
+- [ ] **M5:** Frontend MVC, validations, deployment
 
 ## AI usage
 
