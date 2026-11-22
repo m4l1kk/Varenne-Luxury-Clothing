@@ -69,6 +69,25 @@ class BaseDao
         return $stmt->rowCount() > 0;
     }
 
+    // TRANSACTIONS: every DAO shares the same connection (Database::connect()), so a transaction
+    // started on one DAO also covers the writes of the others. Used by checkout in OrderService.
+    public function beginTransaction(): void
+    {
+        $this->connection->beginTransaction();
+    }
+
+    public function commit(): void
+    {
+        $this->connection->commit();
+    }
+
+    public function rollBack(): void
+    {
+        if ($this->connection->inTransaction()) {
+            $this->connection->rollBack();
+        }
+    }
+
     // Helpers for child DAOs: run a prepared SELECT and return all rows / the first row.
     protected function query(string $sql, array $params = []): array
     {

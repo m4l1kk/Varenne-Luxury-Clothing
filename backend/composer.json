@@ -1,0 +1,7 @@
+{
+    "require": {
+        "flightphp/core": "^3.19",
+        "zircote/swagger-php": "^4.11",
+        "doctrine/annotations": "^2.0"
+    }
+}

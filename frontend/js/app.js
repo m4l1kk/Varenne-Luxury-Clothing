@@ -7,6 +7,11 @@ const VIEWS = ["home", "shop", "product", "cart", "login", "register", "profile"
 const DEFAULT_VIEW = "home";
 const SHOP_STATE = { category: "All", sort: "Newest" };
 
+// REST API (backend/ next to frontend/ on the same server). Only the currency converter uses it so far;
+// the rest of the pages still read js/data.js until the frontend is connected in Milestone 4.
+const API_BASE = "../backend";
+const priceCache = {}; // product id -> converted prices, so changing the currency does not call the API again
+
 const cart = DEMO_CART.map(item => ({ ...item }));
 const euro = n => "€" + n.toLocaleString("en-US");
 
@@ -126,6 +131,9 @@ function renderProduct(id) {
       <label for="size-${i}">${s}</label>
     </div>`).join("");
   root.querySelector("[data-p=add]").dataset.id = p.id;
+  root.querySelector("#currencySelect").value = "EUR";
+  root.querySelector("[data-p=converted]").textContent = "Choose a currency to see the converted price.";
+  root.querySelector("#currencySelect").dataset.id = p.id;
   root.querySelector("[data-p=related]").innerHTML =
     PRODUCTS.filter(x => x.category === p.category && x.id !== p.id).slice(0, 4).map(productCard).join("");
 }
@@ -182,6 +190,31 @@ function renderDashboard() {
       </td></tr>`).join("");
 }
 
+// External API feature: asks the backend for the product price in other currencies (AJAX).
+// If the backend or Frankfurter is down, a friendly message is shown and the EUR price stays.
+async function showConvertedPrice(productId, currency) {
+  const output = document.querySelector("#product [data-p=converted]");
+  if (currency === "EUR") {
+    output.textContent = "Prices are set in euro.";
+    return;
+  }
+  output.textContent = "Loading today's rate…";
+  try {
+    if (!priceCache[productId]) {
+      const response = await fetch(`${API_BASE}/products/${productId}/prices`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      priceCache[productId] = await response.json();
+    }
+    const data = priceCache[productId];
+    const amount = data.prices[currency].toLocaleString("en-US", { style: "currency", currency });
+    output.textContent = `≈ ${amount} (rate of ${data.date})`;
+  } catch (err) {
+    // The real reason is in the console and in backend/logs/error.log; the customer gets a plain message.
+    console.warn("Currency conversion failed:", err);
+    output.textContent = "Live exchange rates are not available right now. Prices are shown in EUR.";
+  }
+}
+
 function updateCartCount() {
   document.getElementById("cartCount").textContent = cart.reduce((n, i) => n + i.qty, 0);
 }
@@ -225,6 +258,9 @@ function bindEvents() {
   document.addEventListener("change", e => {
     if (e.target.matches("#shopSort")) {
       renderShop(SHOP_STATE.category, e.target.value);
+    }
+    if (e.target.matches("#currencySelect")) {
+      showConvertedPrice(Number(e.target.dataset.id), e.target.value);
     }
   });
 
