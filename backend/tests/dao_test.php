@@ -104,6 +104,8 @@ try {
     check('product_variants: decreaseStock() lowers the stock', $variantDao->decreaseStock($variant['id'], 2) && $variantDao->getById($variant['id'])['stock'] == 3);
     check('BaseDao: PHP booleans are saved as 1 / 0', $productDao->update($product['id'], ['is_active' => false])['is_active'] == 0);
 
+    check('BaseDao: beginTransaction() is shared by every DAO (one connection)', $db->inTransaction() && (new OrderDao()) instanceof BaseDao);
+
     // Unknown columns are ignored, so they never reach the SQL text.
     try {
         $categoryDao->add(['name; DROP TABLE users' => 'x']);
@@ -115,6 +117,14 @@ try {
     check('Unexpected error: ' . $e->getMessage(), false);
 } finally {
     $db->rollBack();
+}
+
+// OrderService calls rollBack() in its catch block, so it must not fail when no transaction is open.
+try {
+    (new CategoryDao())->rollBack();
+    check('BaseDao: rollBack() without an open transaction does nothing', true);
+} catch (Throwable $e) {
+    check('BaseDao: rollBack() without an open transaction does nothing', false);
 }
 
 echo PHP_EOL . "$passed passed, $failed failed" . PHP_EOL;

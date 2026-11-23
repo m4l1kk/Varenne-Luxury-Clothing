@@ -18,19 +18,20 @@
       <p class="fs-5 mb-1" data-p="price"></p>
 
       <!-- =====================================================
-           EXTERNAL API FEATURE (planned for a later milestone)
-           Live currency conversion of the price using a public
-           exchange-rate API (e.g. Frankfurter, frankfurter.app).
-           The backend will call the API and cache rates; this
-           block will show the converted price.
+           EXTERNAL API FEATURE (Milestone 3)
+           The price converted with live ECB rates from Frankfurter.
+           js/app.js calls GET backend/products/{id}/prices (AJAX);
+           the backend calls Frankfurter, so the browser never
+           talks to the third-party API directly.
            ===================================================== -->
       <div class="api-slot my-4" data-external-api="currency-converter">
-        <div class="api-label mb-2"><i class="bi bi-plug"></i> External API: currency converter (planned)</div>
-        <div class="d-flex align-items-center gap-2">
-          <select class="form-select form-select-sm w-auto" aria-label="Currency" disabled>
-            <option>EUR</option><option>USD</option><option>GBP</option><option>BAM</option>
+        <div class="api-label mb-2"><i class="bi bi-currency-exchange"></i> Price in your currency</div>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <select class="form-select form-select-sm w-auto" id="currencySelect" aria-label="Currency">
+            <option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option>
+            <option value="CHF">CHF</option><option value="BAM">BAM</option>
           </select>
-          <span class="small text-muted">Converted price will appear here.</span>
+          <span class="small text-muted" data-p="converted">Choose a currency to see the converted price.</span>
         </div>
       </div>
 

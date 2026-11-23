@@ -9,4 +9,4 @@ define('DB_USER', 'root');
 define('DB_PASSWORD', '');
 
 define('JWT_SECRET', 'change-me');
-define('EXCHANGE_API_URL', 'https://api.frankfurter.app'); // external API (currency conversion)
+define('EXCHANGE_API_URL', 'https://api.frankfurter.dev/v1'); // external API: Frankfurter exchange rates (no key needed)

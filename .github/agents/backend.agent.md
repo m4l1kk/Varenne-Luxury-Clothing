@@ -24,5 +24,7 @@ You work only inside `backend/` (and `docs/ERD.md` when the schema changes). Fol
 
 ## Before you finish
 1. List the endpoints you added or changed (method, path, request body, response).
-2. Give a `curl` or Postman example to test each one.
-3. Remind the user to log the change with the `update-ai-log` skill.
+2. Check that every new route has an `@OA` comment and shows up in Swagger (`backend/public/v1/docs/`).
+3. Run `php backend/tests/api_test.php` and `php backend/tests/dao_test.php`; both must end with `0 failed`.
+   Add a check (including an error case) for every new endpoint.
+4. Remind the user to log the change with the `update-ai-log` skill.

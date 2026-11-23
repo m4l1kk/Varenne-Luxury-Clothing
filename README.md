@@ -4,15 +4,17 @@ Web Programming course project. Varenne is an online boutique for a luxury cloth
 customers browse the collection, view products, manage a shopping bag, check out and track orders;
 admins manage products, categories and orders from a dashboard.
 
-> **Status:** Milestone 2 (MySQL database and DAO layer). The frontend still uses mock data until Milestone 4.
+> **Status:** Milestone 3 (REST API with FlightPHP, services, OpenAPI/Swagger docs and the Frankfurter currency converter).
+> Most pages still use mock data until the frontend is connected in Milestone 4.
 
 ## Tech stack
 
 | Layer | Technology |
 |---|---|
 | Frontend | HTML5, CSS3, Bootstrap 5.3, Bootstrap Icons, vanilla JavaScript (hash-routed SPA) |
-| Backend | PHP 8, PDO, MySQL/MariaDB. DAO layer done in Milestone 2; FlightPHP routes and services in Milestone 3 |
-| External API (planned) | Currency conversion via a public exchange-rate API (Frankfurter) |
+| Backend | PHP 8, FlightPHP 3 (REST routes), PDO, MySQL/MariaDB, Composer |
+| API docs | OpenAPI 3 generated with swagger-php, shown with Swagger UI |
+| External API | Frankfurter (ECB exchange rates) for the product price in other currencies |
 | Local server | XAMPP (Apache + MySQL) |
 
 ## Project structure
@@ -29,11 +31,16 @@ Foundations-of-Frontend/
 ├── backend/
 │   ├── dao/                # Database.php, BaseDao.php and one DAO per table
 │   ├── database/           # varenne.sql (schema + sample data)
-│   ├── tests/              # dao_test.php (CRUD check for every DAO)
-│   ├── routes/  services/  middleware/
+│   ├── services/           # Business logic and validation, one service per entity
+│   ├── routes/             # FlightPHP routes with OpenAPI comments, one file per entity
+│   ├── public/v1/docs/     # Swagger UI (index.html) and swagger.php (OpenAPI JSON)
+│   ├── utils/Logger.php    # Writes logs/info.log and logs/error.log
+│   ├── tests/              # dao_test.php (DAO layer) and api_test.php (every endpoint over HTTP)
+│   ├── middleware/         # JWT and role checks (Milestone 4)
 │   ├── config/             # config.example.php committed, config.php ignored
 │   ├── logs/               # ignored by Git
-│   └── index.php
+│   ├── composer.json       # flightphp/core, zircote/swagger-php (vendor/ is not committed)
+│   └── index.php           # Starts Flight, registers services, loads routes, handles errors
 ├── docs/
 │   ├── ERD.md              # Entity-relationship diagram and keys
 │   └── AI_LOG.md           # AI assistant usage log
@@ -63,8 +70,11 @@ Foundations-of-Frontend/
 | Dashboard | `#dashboard` | Admin stats, orders, products, categories |
 | About / Contact | `#about`, `#contact` | Brand story, client care form |
 
-**External API feature:** the dashed box marked `data-external-api="currency-converter"` on the product
-page is where converted prices will appear once the backend calls the exchange-rate API.
+**External API feature:** on the product page, the box marked `data-external-api="currency-converter"` lets the
+customer pick USD, GBP, CHF or BAM. `js/app.js` calls `GET backend/products/{id}/prices` (AJAX); the backend asks
+[Frankfurter](https://frankfurter.dev) for today's ECB rates (5 second timeout) and works out BAM from its fixed rate
+(1 EUR = 1.95583 BAM). If Frankfurter is down, the failure is written to `backend/logs/error.log`, the API answers
+503 with a friendly message, the page shows it and the shop keeps working in EUR.
 
 ## Running locally
 
@@ -81,7 +91,17 @@ double-clicking `index.html` (`file://` blocks the requests).
    This creates the `varenne` database with sample data.
 2. Copy `backend/config/config.example.php` to `backend/config/config.php` and fill in your database
    user and password. `config.php` is git-ignored.
-3. Check the DAO layer: `php backend/tests/dao_test.php` should print `0 failed`.
+3. Install the PHP packages: in `backend/`, run `composer install` (creates `backend/vendor/`).
+4. Check the DAO layer: `php backend/tests/dao_test.php` should print `0 failed`.
+5. Check the API (Apache and MySQL running): `php backend/tests/api_test.php` should print `0 failed`.
+
+The API answers at `http://localhost/<path-to-repo>/backend/` (for example `GET /products`); `backend/.htaccess`
+sends every request to `index.php`, so Apache needs `mod_rewrite` (on by default in XAMPP).
+
+### API documentation (Swagger)
+
+Open `http://localhost/<path-to-repo>/backend/public/v1/docs/`. Every endpoint can be tried there with
+"Try it out". The OpenAPI JSON itself is at `backend/public/v1/docs/swagger.php`.
 
 ## Test accounts
 
@@ -104,7 +124,7 @@ the SQL is in [backend/database/varenne.sql](backend/database/varenne.sql). The 
 
 - [x] **M1:** Project structure, static SPA, draft ERD, README, AI setup
 - [x] **M2:** MySQL database with sample data, DAO layer with a base DAO and CRUD for all 10 entities
-- [ ] **M3:** Services, FlightPHP routes, OpenAPI/Swagger, external API (Frankfurter)
+- [x] **M3:** Services, FlightPHP routes, OpenAPI/Swagger, external API (Frankfurter)
 - [ ] **M4:** JWT authentication, roles, middleware, logging, connected frontend
 - [ ] **M5:** Frontend MVC, validations, deployment
 
